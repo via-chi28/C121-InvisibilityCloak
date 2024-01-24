@@ -44,24 +44,24 @@ while (cap.isOpened()):
     cv2.imshow("mask_1", mask_1)
 
     #Open and expand the image where there is mask 1 (color)
-  
+    mask_1 = cv2.morphologyEx(mask_1, cv2.MORPH_OPEN, np.ones((3, 3), np.unit8)
 
     #Selecting only the part that does not have mask one and saving in mask 2
-   
+    mask_2 = cv2.bitwise_not(mask_1)
 
     #Keeping only the part of the images without the red color 
     #(or any other color you may choose)
-   
-
+    res_1 = cv2.bitwise_and(img, img, mask=mask_2)
+    
     #Keeping only the part of the images with the red color
-   
+    res_2 = cv2.bitwise_and(bg, bg, mask=mask_1)
 
     #Generating the final output
-    final_output = img
-    output_file.write(img)
+    final_output = cv2.addWeighted(res_1, 1, res_2, 1, 0)
+    output_file.write(final_output)
     
     #Displaying the output to the user
-    # cv2.imshow("magic", final_output)
+    cv2.imshow("magic", final_output)
     cv2.waitKey(1)
 
 cap.release()
